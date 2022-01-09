@@ -1,0 +1,447 @@
+﻿@model indexExample.Models.PersonellerClass
+@using Microsoft.AspNetCore.Mvc.Rendering;
+
+@{
+    ViewData["Title"] = "Personel Güncelleme";
+}
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<style>
+   .row {
+        margin-top: 3%;
+    }
+
+    .form-label {
+        width: 10%;
+    }
+
+    .form-control {
+        margin-left: 4%;
+        width: 22%;
+    }
+
+    .form-select {
+        margin-left: 4%;
+        width: 22%;
+    }
+
+    .paragraf {
+        
+    }
+
+    .aciklama {
+        margin-top: 2%;
+        margin-left: 3%;
+        width: 75%;
+    }
+    .buton{
+        margin-left: 1%;
+        width: 5%;
+    }
+    .btn {
+        margin-top: 4%;
+    }
+
+    #container-egitim{
+        margin-top: 1%;
+    }
+
+    input[type="date"] {
+        position: relative;
+    }
+
+   
+    input[type="date"]:after {
+            content: "\25BC";
+            color: #555;
+            padding: 0 5px;
+    }
+
+   
+    input[type="date"]:hover:after {
+            color: #bf1400;
+    }
+
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: auto;
+            height: auto;
+            color: transparent;
+            background: transparent;
+            cursor: pointer;
+    }
+</style>
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="Update">
+        <div class="mb-3">
+                <div class="row">
+                    <div class="col-md-4">
+                         <div class="divMedia">
+                              <div class="Media">
+                                   <div class="row" id="aa_imgFile">
+                                         <img src="" id="a_imgFile" width="50" height="200" />
+                                   </div>
+                                   <div class="form-group">
+                                         <label class="control-label"></label>
+                                         <input type="file" name="iFormFile" id="imgFile" mediaId="" onchange="createMedia(this.id)" accept="image/*" />
+                                   </div>
+                               </div>
+                          </div>
+                      </div>
+                </div>
+                <div class="row">
+                    <label class="form-label" for="exampleFormControlInput1">Ad:</label>
+                    <input name="Ad" id="ad" class="form-control" placeholder="Ad">
+                </div>
+                <div class="row">
+                    <label class="form-label" for="exampleFormControlInput1">SoyAd:</label>
+                    <input name="SoyAd" id="soyAd" class="form-control" placeholder="SoyAd">
+                </div>
+                <div class="row">
+                    <label class="form-label" for="exampleFormControlInput1">Tel No:</label>
+                    <input name="TelNo" id="telNo" class="form-control" placeholder="Telefon Numarası" maxlength="11">
+                </div>
+                <div class="row">
+                    <label class="form-label" for="exampleFormControlInput1">Doğum Tarihi:</label>
+                    <input type="date" name="dogumTarihi" id="dogumTarihi"  class="form-control">
+                </div>
+                <div class="row">
+                    <label class="form-label" for="exampleFormControlInput1">Doğduğunuz Ülke:</label>
+                    <select name="dogduguUlke" id="dogduguUlke" class="form-select" onchange="Sehirler()">
+                        <option selected>Doğduğunuz Ülkeyi Seçin</option>
+                    </select>
+                    <label class="form-label" for="exampleFormControlInput1">Doğduğunuz Şehir:</label>
+                    <select name="dogduguSehir" id="dogduguSehir" class="form-select">
+                        <option selected>Doğduğunuz Şehri Seçin</option>
+                    </select>
+                </div>
+                <div class="paragraf">
+                    <label class="form-label" for="exampleFormControlInput1">Açıklama:</label>
+                    <textarea class="aciklama" id="aciklama" rows="3"></textarea>
+                    <input name="medyaid" type="hidden" id="medyaid"/>
+                </div>
+                <br />
+                <h3>Aldığı Eğitim</h3>
+                <div class="divTekrar">
+                    <div class="row" id="div">
+                        <div class="row">
+                            <label class="form-label" for="exampleFormControlInput1">Okul Tipi:</label>
+                            <select id="okulTipi0" class="form-select">
+                                <option selected>Okul Tipini Seçin</option>
+                            </select>
+                            <input id="okulAdı0" class="form-control" placeholder="Okul Adını Giriniz."/>
+                            <input id="mezunTarihi0" type="date" class="form-control" placeholder="Mezun Tarihiniz.">
+                            <input class="buton" type="button" value="+" onclick="createTekrar()"/>
+                            <input class="buton" type="button" value="-" onclick="deleteTekrar(this)"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 col-6 mx-auto">
+                    <input class="btn btn-warning" type="button" value="Güncelle" onclick="updateKayit()" id="update">
+                </div>
+        </div>   
+</form>
+
+@section scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/jquery.dataTables.min.css" integrity="sha512-1k7mWiTNoyx2XtmI96o+hdjP8nn0f3Z2N4oF/9ZZRgijyV4omsKOXEnqL1gKQNPy2MTSP9rIEWGcH/CInulptA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.bootstrap4.min.css" integrity="sha512-PT0RvABaDhDQugEbpNMwgYBCnGCiTZMh9yOzUsJHDgl/dMhD9yjHAwoumnUk3JydV3QTcIkNDuN40CJxik5+WQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            verilerGelsin();
+            Ulkeler();
+            Okullar();
+        });
+
+        var id;
+        var query = (window.location).href;
+        id = query.substring(query.lastIndexOf('=') + 1);
+        var veriler = null;
+
+        function getParameterByName(name, url = window.location.href) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        function Ulkeler() {
+            $.ajax({
+                type: "Get",
+                url: "/PersonelRecord/UlkeCekme",
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    console.log(result);
+                    var myData = result;
+                    var myDesign = "";
+                    for (var i = 0; i < myData.length; i++) {
+                        myDesign += "<option value='" + myData[i].id + "'>" + myData[i].ulkeSehir + "</option>";
+                    }
+                    $("#dogduguUlke").append(myDesign);
+                }
+            });
+        }
+
+        function Sehirler() {
+            $.ajax({
+                type: "Get",
+                url: "/PersonelRecord/SehirCekme/" + $("#dogduguUlke").val(),
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    console.log(result);
+                    var myData = result;
+                    var myDesign = "";
+                    for (var i = 0; i < myData.length; i++) {
+                        myDesign += "<option value='" + myData[i].id + "'>" + myData[i].ulkeSehir + "</option>";
+                    }
+                    $("#dogduguSehir").html(myDesign);
+                }
+            });
+        }
+
+        function createMedia(id) {
+            if (event.target.files.length > 0) {
+                var src = URL.createObjectURL(event.target.files[0]);
+                var preview = document.getElementById("a_" + id);
+                preview.src = src;
+                preview.style.display = "block";
+            }
+            var fdata = new FormData();
+            var fileInput = $('#' + id)[0];
+            var file = fileInput.files[0];
+            fdata.append("iFormFile", file);
+
+
+            $.ajax({
+                type: "POST",
+                url: "/PersonelRecord/CreateMedia/",
+                data: fdata,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                      if (result != 0) {
+                        $("#" + id).attr("mediaid", result);
+                        $("#medyaid").val(result);
+                    }
+                }
+            });
+        }
+
+        var i=0;
+
+        function createTekrar() {
+            i++;
+            var design = '<div class="row" id="div' + i + '">';
+            design += '<div class="row">';
+            design += '<label class="form-label" for="exampleFormControlInput1">Okul Tipi:</label>';
+            design += '<select id="okulTipi'+ i +'" class="form-select"><option selected>Okul Tipini Seçin</option></select>';
+            design += '<input id="okulAdı'+ i +'" type="text" class="form-control" placeholder="Okul Adını Giriniz."/>';
+            design += '<input id="mezunTarihi'+ i +'" type="date" class="form-control" placeholder="Mezun Tarihiniz.">';
+            design += '<input class="buton" type="button" value="+" onclick="createTekrar()"/>';
+            design += '<input id="'+ i +'" class="buton" type="button" value="-" onclick="deleteTekrar(this.id)"/>';
+            design += '</div>';
+            design += '</div>';
+
+            $(".divTekrar").append(design);
+            Okullar2(i);
+        }
+
+        function deleteTekrar(id) {
+
+            const personelEgitim = [
+                {okulTipiID:"",okulAdı:"",mezunTarihi:""},
+                {okulTipiID:"",okulAdı:"",mezunTarihi:""},
+                {okulTipiID:"",okulAdı:"",mezunTarihi:""},
+                {okulTipiID:"",okulAdı:"",mezunTarihi:""},
+                {okulTipiID:"",okulAdı:"",mezunTarihi:""},
+                {okulTipiID:"",okulAdı:"",mezunTarihi:""},
+                {okulTipiID:"",okulAdı:"",mezunTarihi:""},
+                {okulTipiID:"",okulAdı:"",mezunTarihi:""}
+            ];
+
+            var okulTipiID = $("#okulTipi"+id).val();
+            var okulAdı = $("#okulAdı"+id).val();
+            var mezunTarihi = $("#mezunTarihi"+id).val();
+
+            personelEgitim[id].okulTipiID = okulTipiID;
+            personelEgitim[id].okulAdı = okulAdı;
+            personelEgitim[id].mezunTarihi = mezunTarihi;
+
+            $("#div" + id).remove();
+            i--;
+
+            var deleteEgitim = {
+                personelEgitim: personelEgitim
+            }
+
+            $.ajax({
+                type: "Post",
+                url: "/PersonelView/deleteOkul/",
+                dataType: "json",
+                data: { okulSil: deleteEgitim },
+                async: false,
+                success: function () {
+
+                }
+
+            });
+        }
+
+        function Okullar() {
+            $.ajax({
+                type: "Get",
+                url: "/PersonelRecord/OkulCekme",
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    console.log(result);
+                    var myData = result;
+                    var myDesign = "";
+
+
+                    for (var i = 0; i < myData.length; i++) {
+
+                        myDesign += "<option value='" + myData[i].id + "'>" + myData[i].okulTipi + "</option>";
+                    }
+                    $("#okulTipi0").append(myDesign);
+                }
+            });
+        }
+
+        function Okullar2(id) {
+            $.ajax({
+                type: "Get",
+                url: "/PersonelRecord/OkulCekme",
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    console.log(result);
+                    var myData = result;
+                    var myDesign = "";
+
+
+                    for (var i = 0; i < myData.length; i++) {
+
+                        myDesign += "<option value='" + myData[i].id + "'>" + myData[i].okulTipi + "</option>";
+                    }
+                    $("#okulTipi"+id).append(myDesign);
+                }
+            });
+        }
+
+        function verilerGelsin() {
+            var id = getParameterByName("id");
+            $.ajax({
+                type: "Get",
+                url: "/PersonelView/VerileriGelsin/" + id,
+                dataType: "json",
+                data: { id: id },
+                success: function (data) {
+                    console.log(data);
+                    $("#ad").val(data.ad);
+                    $("#soyAd").val(data.soyAd);
+                    $("#telNo").val(data.telNo);
+                    $("#dogumTarihi").val(data.dogumTarihi);
+                    $('#dogduguUlke option:contains("'+ data.dogduguUlke +'")').attr('selected', 'selected');
+                    $("#aciklama").val(data.aciklama);
+                    $("#a_imgFile").attr("src", data.medyaURL);
+                    $("#imgFile").attr("name",data.medyaAdı);
+                    $("#imgFile").attr("mediaId",data.medyaId);
+                    Sehirler($('#dogduguUlke option:contains("'+ data.dogduguUlke +'")').val());
+                    $('#dogduguSehir option:contains("'+ data.dogduguSehir +'")').attr('selected', 'selected');
+
+                    var sayac = 0;
+
+                    for (var i = 0 ; i<data.personelEgitim.length ; i++){
+                        $('#okulTipi'+i+' option[value="'+ data.personelEgitim[i].okulTipiID +'"]').prop("selected",true);
+                        $('#okulAdı'+i+'').val(data.personelEgitim[i].okulAdı);
+                        $('#mezunTarihi'+i+'').val(data.personelEgitim[i].mezunTarihi);
+                        sayac++;
+
+                        if(sayac == data.personelEgitim.length){
+
+                        }
+                        else{
+                            createTekrar();
+                        }
+                    }
+                }
+            });
+        };
+
+        function updateKayit() {
+            var id = getParameterByName("id");
+
+            var Ad = $("#ad").val();
+            var SoyAd = $("#soyAd").val();
+            var TelNo = $("#telNo").val();
+            var dogumTarihi = $("#dogumTarihi").val();
+            var dogduguUlke = $("#dogduguUlke option:selected").val();
+            var dogduguSehir = $("#dogduguSehir option:selected").val();
+            var Aciklama = $("#aciklama").val(); 
+            var MedyaId = $("#imgFile").attr("mediaId");
+            
+            const personelEgitim = [
+                {okulTipiID:"",okulAdı:"",mezunTarihi:""},
+                {okulTipiID:"",okulAdı:"",mezunTarihi:""},
+                {okulTipiID:"",okulAdı:"",mezunTarihi:""},
+                {okulTipiID:"",okulAdı:"",mezunTarihi:""},
+                {okulTipiID:"",okulAdı:"",mezunTarihi:""},
+                {okulTipiID:"",okulAdı:"",mezunTarihi:""},
+                {okulTipiID:"",okulAdı:"",mezunTarihi:""},
+                {okulTipiID:"",okulAdı:"",mezunTarihi:""}
+            ];
+            
+            for (var deger=0; deger <= i ;deger++)
+            {
+                var okulTipiID = $("#okulTipi"+deger).val();
+                var okulAdı = $("#okulAdı"+deger).val();
+                var mezunTarihi = $("#mezunTarihi"+deger).val();
+
+                personelEgitim[deger].okulTipiID = okulTipiID;
+                personelEgitim[deger].okulAdı = okulAdı;
+                personelEgitim[deger].mezunTarihi = mezunTarihi;
+            }
+
+
+
+            var update = {
+                Ad: Ad,
+                SoyAd: SoyAd,
+                TelNo: TelNo,
+                dogumTarihi: dogumTarihi,
+                dogduguUlke: dogduguUlke,
+                dogduguSehir: dogduguSehir,
+                Aciklama: Aciklama,
+                Id: id,
+                MedyaId: MedyaId,
+                personelEgitim: personelEgitim
+            }
+            $.ajax({
+                type: "Post",
+                url: "/PersonelView/UpdateKayit/",
+                dataType: "json",
+                data: { guncelle: update },
+                async: false,
+                success: function () {
+
+                }
+
+            });
+            window.location.href = "../PersonelView/Show";
+        }
+    </script>
+}

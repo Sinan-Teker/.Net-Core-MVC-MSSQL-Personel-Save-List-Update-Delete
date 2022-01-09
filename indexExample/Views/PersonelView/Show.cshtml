@@ -1,0 +1,70 @@
+﻿@model IEnumerable<indexExample.Models.PersonellerClass>
+
+@{
+    ViewData["Title"] = "Personel Listesi";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="container">
+    <table id="table" class="display">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Ad</th>
+                <th>Soyad</th>
+                <th>Tel No</th>
+                <th>Doğum Tarihi</th>
+                <th>Ülke</th>
+                <th>Şehir</th>
+                <th>Açıklama</th>
+                <th>Mezuniyet Tarihi</th>
+                <th>Resim</th>
+                <th>Güncelle</th>
+                <th>Sil</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Ad</td>
+                <td>@item.SoyAd</td>
+                <td>@item.TelNo</td>
+                <td>@item.dogumTarihi</td>
+                <td>@item.dogduguUlke</td>
+                <td>@item.dogduguSehir</td>
+                <td>@item.Aciklama</td>
+                <td>@item.mezunTarihi</td>
+                <td><img src="@("~/MedyaKutuphanesi/" + @item.MedyaURL)" asp-append-version="true" width = "60px" height="60px"></td>
+                <td><a class="btn btn-warning" onclick="btnUpdateKayit(this.id)" id="@item.Id">Güncelle</a></td>
+                <td><a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Silmek istediğinizden emin misiniz?');">Sil</a></td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<p>
+    <a asp-controller="PersonelRecord" asp-action="Create">Yeni Kayıt</a>
+</p>
+
+@section scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/jquery.dataTables.min.css" integrity="sha512-1k7mWiTNoyx2XtmI96o+hdjP8nn0f3Z2N4oF/9ZZRgijyV4omsKOXEnqL1gKQNPy2MTSP9rIEWGcH/CInulptA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.bootstrap4.min.css" integrity="sha512-PT0RvABaDhDQugEbpNMwgYBCnGCiTZMh9yOzUsJHDgl/dMhD9yjHAwoumnUk3JydV3QTcIkNDuN40CJxik5+WQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $("#table").dataTable();
+        });
+
+        function btnUpdateKayit(id) {
+            console.log(id);
+            window.location.href = "/PersonelView/Update?id=" + id;
+        };
+  </script>
+}

@@ -1,0 +1,91 @@
+﻿body {
+}
+
+p {
+    font-size: 1vw;
+}
+
+#banner {
+    float: left;
+    margin-top: 3%;
+}
+
+    #banner h1 {
+        position: absolute;
+        color: white;
+        top: 23%;
+        left: 34%;
+        font-size: 3vw;
+    }
+
+.main {
+    margin-top: 0;
+    float: left;
+    background-color: #808080;
+}
+
+#sol-alt-sol {
+    float: left;
+    margin-top: 3%;
+    width: 40%;
+    height: 30%;
+    background-color: #000000;
+}
+
+#sag-alt-sag {
+    float: right;
+    margin-left: 5%;
+    margin-top: 3%;
+    width: 25%;
+    height: 15%;
+    background-color: #4cff00;
+}
+
+#orta-alt {
+    float: left;
+    margin-top: 3%;
+    margin-left: 5%;
+    width: 25%;
+    height: 15%;
+    background-color: #ff6a00;
+}
+
+#sag-alt-alt {
+    float: right;
+    margin-top: 3%;
+    width: 55%;
+    height: 10%;
+    background-color: #ffd800;
+}
+
+.dip {
+    float: right;
+    margin-bottom: 10%;
+    margin-top: 0;
+    background-color: #b6ff00;
+}
+
+
+#alt-sol {
+    float: left;
+    margin-top: 3%;
+    width: 45%;
+    background-color: #00ffff;
+}
+
+
+#alt-orta {
+    float: left;
+    margin-top: 3%;
+    margin-left: 5%;
+    width: 20%;
+    background-color: #0094ff;
+}
+
+#alt-sag {
+    float: right;
+    margin-top: 3%;
+    margin-left: 5%;
+    width: 25%;
+    background-color: #00ff21;
+}
